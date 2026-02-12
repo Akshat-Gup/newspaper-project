@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Personal Chronicle - Your Story, Newsworthy</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Newspaper Header -->
+    <header class="newspaper-header">
+        <div class="header-line"></div>
+        <div class="masthead">
+            <div class="date-weather">
+                <span id="current-date"></span>
+            </div>
+            <h1 class="newspaper-title">The Personal Chronicle</h1>
+            <div class="subtitle">All The News That's Fit To Print About You</div>
+        </div>
+        <div class="header-line"></div>
+    </header>
+
+    <!-- Style Tabs -->
+    <nav class="style-tabs">
+        <button class="tab-btn active" data-style="nytimes">New York Times</button>
+        <button class="tab-btn" data-style="classic">Classic</button>
+        <button class="tab-btn" data-style="modern">Modern</button>
+        <button class="tab-btn" data-style="tabloid">Tabloid</button>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="newspaper-content">
+        <!-- Instructions Section (styled like a newspaper article) -->
+        <section class="instructions-section" id="instructions">
+            <article class="instruction-article">
+                <h2 class="article-headline">How to Create Your Personal Story</h2>
+                <p class="article-byline">By The Editorial Desk | Published Today</p>
+                
+                <div class="article-columns">
+                    <div class="column">
+                        <p class="dropcap">In an unprecedented move, The Personal Chronicle now offers you the opportunity to become the subject of your own exclusive feature story. This revolutionary service transforms your personal information into a professionally crafted newspaper article, complete with all the gravitas and style you'd expect from a major publication.</p>
+                        
+                        <p>The process is remarkably simple:</p>
+                        
+                        <h3 class="subheading">Step One: Prepare Your Information</h3>
+                        <p>Create a text file containing your personal details, achievements, interests, or any story you wish to tell. Include facts, dates, accomplishments, and anecdotes that make your story unique.</p>
+                    </div>
+                    
+                    <div class="column">
+                        <h3 class="subheading">Step Two: Upload Your File</h3>
+                        <p>Use the document upload section below to submit your information. Our advanced editorial system will process your submission immediately.</p>
+                        
+                        <h3 class="subheading">Step Three: Select Your Style</h3>
+                        <p>Choose from various newspaper styles using the tabs above. Each style brings a distinct voice and aesthetic to your story.</p>
+                        
+                        <h3 class="subheading">Step Four: Share Your Story</h3>
+                        <p>Once your personalized article is generated, you can easily share it with friends, family, or colleagues. Your story, presented with the same care and attention given to the day's most important news.</p>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- Upload Section -->
+        <section class="upload-section" id="upload-area">
+            <div class="upload-frame">
+                <div class="frame-header">DOCUMENT SUBMISSION</div>
+                <div class="upload-content">
+                    <div class="upload-icon">📰</div>
+                    <h3>Submit Your Story</h3>
+                    <p>Upload a text file with your information</p>
+                    
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="file-input" accept=".txt,.doc,.docx" />
+                        <label for="file-input" class="upload-btn">Choose File</label>
+                        <span id="file-name" class="file-name">No file chosen</span>
+                    </div>
+                    
+                    <button id="generate-btn" class="generate-btn" disabled>Generate Article</button>
+                    <div id="loading" class="loading" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Printing your story...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Article Display Section -->
+        <section class="article-display" id="article-section" style="display: none;">
+            <div class="newspaper-page">
+                <article class="generated-article" id="generated-content">
+                    <!-- Generated article will be inserted here -->
+                </article>
+                
+                <div class="article-actions">
+                    <button id="share-btn" class="action-btn">Share Article</button>
+                    <button id="print-btn" class="action-btn">Print Edition</button>
+                    <button id="new-article-btn" class="action-btn">Create Another</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="newspaper-footer">
+        <div class="footer-line"></div>
+        <p class="footer-text">The Personal Chronicle &copy; <span id="footer-year"></span> | All Rights Reserved</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
