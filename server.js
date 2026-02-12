@@ -8,6 +8,12 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Ensure uploads directory exists
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
 // Configure multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -31,6 +37,8 @@ const openai = new OpenAI({
 
 // Route to handle file upload and article generation
 app.post('/generate-article', upload.single('userFile'), async (req, res) => {
+  let filePath = null;
+  
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
@@ -39,8 +47,8 @@ app.post('/generate-article', upload.single('userFile'), async (req, res) => {
     const { style } = req.body;
     
     // Read the uploaded file
-    const filePath = path.join(__dirname, 'uploads', req.file.filename);
-    const fileContent = fs.readFileSync(filePath, 'utf-8');
+    filePath = path.join(__dirname, 'uploads', req.file.filename);
+    const fileContent = await fs.promises.readFile(filePath, 'utf-8');
 
     // Generate article using OpenAI
     const completion = await openai.chat.completions.create({
@@ -60,14 +68,25 @@ app.post('/generate-article', upload.single('userFile'), async (req, res) => {
     });
 
     const article = completion.choices[0].message.content;
-
-    // Clean up uploaded file
-    fs.unlinkSync(filePath);
-
     res.json({ article });
+
   } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: 'Failed to generate article: ' + error.message });
+    console.error('Error generating article:', error);
+    
+    // Provide user-friendly error messages without exposing sensitive details
+    let userMessage = 'Failed to generate article. Please try again.';
+    if (error.code === 'invalid_api_key') {
+      userMessage = 'Invalid API key configuration. Please check your settings.';
+    } else if (error.status === 429) {
+      userMessage = 'API rate limit reached. Please try again later.';
+    }
+    
+    res.status(500).json({ error: userMessage });
+  } finally {
+    // Clean up uploaded file
+    if (filePath && fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
   }
 });
 

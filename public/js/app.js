@@ -103,7 +103,14 @@ async function generateArticle() {
         
     } catch (error) {
         console.error('Error:', error);
-        alert('Error generating article: ' + error.message + '\n\nMake sure you have set your OPENAI_API_KEY in the .env file.');
+        let errorMessage = 'Error generating article. Please try again.';
+        
+        // Check if we have error details from the server
+        if (error.message) {
+            errorMessage = error.message;
+        }
+        
+        alert(errorMessage + '\n\nNote: Make sure you have set your OPENAI_API_KEY in the .env file.');
     } finally {
         loading.style.display = 'none';
         generateBtn.disabled = false;
@@ -127,6 +134,9 @@ function displayArticle(articleText) {
     // Parse the article text into headline, subheading, and body
     const lines = articleText.split('\n').filter(line => line.trim());
     
+    // Maximum length for a subheading (short, descriptive line)
+    const MAX_SUBHEADING_LENGTH = 100;
+    
     let headline = '';
     let subheading = '';
     let body = [];
@@ -135,7 +145,7 @@ function displayArticle(articleText) {
         headline = lines[0];
         if (lines.length > 1) {
             // Check if second line looks like a subheading (shorter, different style)
-            if (lines[1].length < 100) {
+            if (lines[1].length < MAX_SUBHEADING_LENGTH) {
                 subheading = lines[1];
                 body = lines.slice(2);
             } else {
